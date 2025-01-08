@@ -42,12 +42,12 @@ These are some of my thoughts - they aren't explicitly described, but I'm planni
 
 #### State Diagram ####
 After reviewing the requirements, I put together this simple state diagram of how the system should function:
-![State Diagram for Wifi Stoplight](/state_diagram.png)
+![State Diagram for Wifi Stoplight](./state_diagram.png)
 It is a pretty basic design, but that seems like it should work well.
 
 #### Flowchart ####
 My flowchart of how the code should execute seems very similar to the state diagram. With a system this basic, I don't think there are a lot of nuances in the code. I'm guessing that I'll define a few functions, so I may come back and update this to reflect those.
-![Flowchart Diagram for Wifi Stoplight](/flowchart.png)
+![Flowchart Diagram for Wifi Stoplight](./flowchart.png)
 
 #### Design Document ####
 For my project, this file *(design.md)* serves as my design document.
