@@ -1,0 +1,4 @@
+Just keeping some notes here while I work through the process.
+
+### Chrome can't connect to Flask on RPI (but Safari Can), VS Code can't connect over SSH ###
+Usually I do my coding from my desktop PC in my office. This time, I decided to try my new Mac Mini. I didn't realize that you have to enable local network access in **System Settings | Privacy & Security | Local Network** and then enable *Chrome* and *Visual Studio Code*. Honestly, I don't want to admit how much time this took, but I wish there was some sort of pop-up that told me that the OS was blocking local network access. Wow, that is frustrating! 
