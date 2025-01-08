@@ -16,6 +16,29 @@ ChatGPT
 *Edited Code*
 The HTML template is now integrated into the Python script using render_template_string. You can run this single file, and it will provide the webpage to control the LED. Let me know if you need further assistance!
 
+#### I saved the file as the original `wifi_flashlight_rpi` and ran it using `python3 wifi_flashlight_rpi` ####
+Here is the commandline output:
+    python3 wifi_flashlight.py 
+    /home/todddb/wifi_flashlight_rpi/wifi_flashlight.py:6: RuntimeWarning: This channel is already in use, continuing anyway.  Use GPIO.setwarnings(False) to disable warnings.
+     GPIO.setup(17, GPIO.OUT)
+     * Serving Flask app 'wifi_flashlight'
+     * Debug mode: off
+    WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+     * Running on all addresses (0.0.0.0)
+     * Running on http://127.0.0.1:5000
+     * Running on http://192.168.11.193:5000
+    Press CTRL+C to quit
+    192.168.11.3 - - [08/Jan/2025 16:39:40] "GET / HTTP/1.1" 200 -
+    192.168.11.3 - - [08/Jan/2025 16:39:40] "GET /favicon.ico HTTP/1.1" 404 -
+    192.168.11.3 - - [08/Jan/2025 16:39:44] "POST / HTTP/1.1" 200 -
+    192.168.11.3 - - [08/Jan/2025 16:39:46] "POST / HTTP/1.1" 200 -
+    192.168.11.3 - - [08/Jan/2025 16:39:47] "POST / HTTP/1.1" 200 -
+    192.168.11.3 - - [08/Jan/2025 16:39:48] "POST / HTTP/1.1" 200 -
+
+and here is what the webpage looks like:
+![Screenshot](./doc/screenshots/v1_screenshot.png)
+
+
 
 
 
