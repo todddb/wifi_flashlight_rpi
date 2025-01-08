@@ -18,6 +18,7 @@ The HTML template is now integrated into the Python script using render_template
 
 #### I saved the file as the original `wifi_flashlight_rpi` and ran it using `python3 wifi_flashlight_rpi` ####
 Here is the commandline output:
+
     python3 wifi_flashlight.py 
     /home/todddb/wifi_flashlight_rpi/wifi_flashlight.py:6: RuntimeWarning: This channel is already in use, continuing anyway.  Use GPIO.setwarnings(False) to disable warnings.
      GPIO.setup(17, GPIO.OUT)
@@ -36,6 +37,7 @@ Here is the commandline output:
     192.168.11.3 - - [08/Jan/2025 16:39:48] "POST / HTTP/1.1" 200 -
 
 and here is what the webpage looks like:
+
 ![Screenshot](./doc/screenshots/v1_screenshot.png)
 
 
