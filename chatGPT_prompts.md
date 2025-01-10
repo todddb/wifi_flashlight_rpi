@@ -198,7 +198,7 @@ I've added support for two additional LEDs connected to GPIO27 and GPIO22. The w
 
 When I ran it, the new interface looks like this:
 
-![Screenshot](./doc/screenshots/v1_screenshot.png)
+![Screenshot](./doc/screenshots/v2_screenshot.png)
 
 I don't like how it shows all 3 LEDs seperately, I would like them to funnction as a single light, even if I have them turn on and off a little staggered to provide a nice fade.
 
