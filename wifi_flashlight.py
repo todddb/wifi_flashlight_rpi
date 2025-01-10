@@ -21,10 +21,6 @@ HTML_TEMPLATE = """
 <body>
     <h1>Control the LEDs</h1>
     <p>LEDs are currently: <strong>{{ "ON" if led_state else "OFF" }}</strong></p>
-    <form method="post">
-        <button type="submit" name="action" value="on">Turn ALL ON</button>
-        <button type="submit" name="action" value="off">Turn ALL OFF</button>
-    </form>
 </body>
 </html>
 """
@@ -32,35 +28,30 @@ HTML_TEMPLATE = """
 # Helper function for fading LEDs
 def fade_leds(action):
     steps = 50
-    delay = 0.005  # Total of 0.25 seconds for full fade
+    delay = 0.01  # Total of 0.5 seconds for full fade
 
     for i in range(steps + 1):
         pwm_value = i / steps if action == "on" else (steps - i) / steps
 
-        # Center LED starts earlier/later
-        if pwm_value >= 0.2:
-            GPIO.output(27, GPIO.HIGH if action == "on" else GPIO.LOW)
-        else:
-            GPIO.output(27, GPIO.LOW)
-
-        # Outer LEDs
-        GPIO.output(17, GPIO.HIGH if pwm_value > 0.1 else GPIO.LOW)
-        GPIO.output(22, GPIO.HIGH if pwm_value > 0.1 else GPIO.LOW)
+        for pin in LED_PINS:
+            GPIO.output(pin, GPIO.HIGH if pwm_value > 0 else GPIO.LOW)
 
         time.sleep(delay)
 
 # Flask routes
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
+    return render_template_string(HTML_TEMPLATE, led_state=led_state)
+
+@app.route("/led=<state>", methods=["GET"])
+def control_led(state):
     global led_state
-    if request.method == "POST":
-        action = request.form["action"]
-        if action == "on":
-            fade_leds("on")
-            led_state = True
-        elif action == "off":
-            fade_leds("off")
-            led_state = False
+    if state == "on":
+        fade_leds("on")
+        led_state = True
+    elif state == "off":
+        fade_leds("off")
+        led_state = False
 
     return render_template_string(HTML_TEMPLATE, led_state=led_state)
 
