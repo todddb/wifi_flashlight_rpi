@@ -21,6 +21,12 @@ HTML_TEMPLATE = """
 <body>
     <h1>Control the LEDs</h1>
     <p>LEDs are currently: <strong>{{ "ON" if led_state else "OFF" }}</strong></p>
+    <form action="/led=on" method="get">
+        <button type="submit">Turn ON</button>
+    </form>
+    <form action="/led=off" method="get">
+        <button type="submit">Turn OFF</button>
+    </form>
 </body>
 </html>
 """
