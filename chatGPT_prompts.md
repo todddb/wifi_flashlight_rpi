@@ -610,3 +610,115 @@ That's good. Now a page displays, but there isn't a button on it.
 
 I've added buttons to the default page that allow you to turn the LEDs on and off by sending GET requests to the appropriate routes. Let me know if you need further refinements!
 
+#### You Said: ####
+
+That is really good! Now, can we update the interface, and add two enhancements? First, I'd like a slider that goes from on to off and back to on. Second, I'd like it to use AJAX so the slider stays sync'd, even if the state changes externally. Is that possible?
+
+
+#### ChatGPT said: ####
+
+    from flask import Flask, jsonify, render_template_string, request
+    import RPi.GPIO as GPIO
+    import time
+
+    # Setup GPIO
+    GPIO.setmode(GPIO.BCM)
+    LED_PINS = [17, 27, 22]
+    for pin in LED_PINS:
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
+
+    # Create Flask app
+    app = Flask(__name__)
+
+    HTML_TEMPLATE = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>LED Control</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                // Update slider and state dynamically
+                function updateState() {
+                    $.getJSON("/state", function(data) {
+                        $("#led-slider").val(data.state ? 1 : 0);
+                        $("#led-status").text(data.state ? "ON" : "OFF");
+                    });
+                }
+
+                // Change LED state when slider moves
+                $("#led-slider").on("input", function() {
+                    var state = $(this).val() == 1 ? "on" : "off";
+                    $.get("/led=" + state, function() {
+                        updateState();
+                    });
+                });
+
+                // Periodically check state
+                setInterval(updateState, 1000);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Control the LEDs</h1>
+        <p>LEDs are currently: <strong id="led-status">{{ "ON" if led_state else "OFF" }}</strong></p>
+        <input type="range" id="led-slider" min="0" max="1" step="1" value="{{ 1 if led_state else 0 }}">
+    </body>
+    </html>
+    """
+
+    # Helper function for fading LEDs
+    def fade_leds(action):
+        steps = 50
+        delay = 0.01  # Total of 0.5 seconds for full fade
+
+        for i in range(steps + 1):
+            pwm_value = i / steps if action == "on" else (steps - i) / steps
+
+            for pin in LED_PINS:
+                GPIO.output(pin, GPIO.HIGH if pwm_value > 0 else GPIO.LOW)
+
+            time.sleep(delay)
+
+    # Flask routes
+    @app.route("/")
+    def index():
+        return render_template_string(HTML_TEMPLATE, led_state=led_state)
+
+    @app.route("/led=<state>", methods=["GET"])
+    def control_led(state):
+        global led_state
+        if state == "on":
+            fade_leds("on")
+            led_state = True
+        elif state == "off":
+            fade_leds("off")
+            led_state = False
+
+        return "", 204
+
+    @app.route("/state", methods=["GET"])
+    def get_state():
+        return jsonify(state=led_state)
+
+    # Initialize LED state
+    led_state = False
+
+    if __name__ == "__main__":
+        try:
+            app.run(host="0.0.0.0", port=5000)
+        finally:
+            GPIO.cleanup()
+
+
+I've updated the application to include a slider control for the LEDs and implemented AJAX functionality to keep the slider synced with the LED state, even if it changes externally. Let me know if you need further adjustments or enhancements!
+
+#### My Thoughts: ####
+This really looks pretty good. I like the slider, and I like that it stays sync'd, even if multiple browsers are hitting it at the same time. Here is the current view:
+
+![Screenshot](./doc/screenshots/v3_screenshot.png)
+
+There are just a few small adjustments I'd like to make to the webpage. I'll do those now.
+
+#### You Said: ####

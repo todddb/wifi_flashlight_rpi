@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request
+from flask import Flask, jsonify, render_template_string, request
 import RPi.GPIO as GPIO
 import time
 
@@ -17,16 +17,34 @@ HTML_TEMPLATE = """
 <html>
 <head>
     <title>LED Control</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Update slider and state dynamically
+            function updateState() {
+                $.getJSON("/state", function(data) {
+                    $("#led-slider").val(data.state ? 1 : 0);
+                    $("#led-status").text(data.state ? "ON" : "OFF");
+                });
+            }
+
+            // Change LED state when slider moves
+            $("#led-slider").on("input", function() {
+                var state = $(this).val() == 1 ? "on" : "off";
+                $.get("/led=" + state, function() {
+                    updateState();
+                });
+            });
+
+            // Periodically check state
+            setInterval(updateState, 1000);
+        });
+    </script>
 </head>
 <body>
     <h1>Control the LEDs</h1>
-    <p>LEDs are currently: <strong>{{ "ON" if led_state else "OFF" }}</strong></p>
-    <form action="/led=on" method="get">
-        <button type="submit">Turn ON</button>
-    </form>
-    <form action="/led=off" method="get">
-        <button type="submit">Turn OFF</button>
-    </form>
+    <p>LEDs are currently: <strong id="led-status">{{ "ON" if led_state else "OFF" }}</strong></p>
+    <input type="range" id="led-slider" min="0" max="1" step="1" value="{{ 1 if led_state else 0 }}">
 </body>
 </html>
 """
@@ -59,7 +77,11 @@ def control_led(state):
         fade_leds("off")
         led_state = False
 
-    return render_template_string(HTML_TEMPLATE, led_state=led_state)
+    return "", 204
+
+@app.route("/state", methods=["GET"])
+def get_state():
+    return jsonify(state=led_state)
 
 # Initialize LED state
 led_state = False
