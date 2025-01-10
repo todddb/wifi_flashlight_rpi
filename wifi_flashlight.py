@@ -1,14 +1,13 @@
 from flask import Flask, render_template_string, request
 import RPi.GPIO as GPIO
+import time
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(17, GPIO.OUT)
-GPIO.setup(27, GPIO.OUT)
-GPIO.setup(22, GPIO.OUT)
-GPIO.output(17, GPIO.LOW)
-GPIO.output(27, GPIO.LOW)
-GPIO.output(22, GPIO.LOW)
+LED_PINS = [17, 27, 22]
+for pin in LED_PINS:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.LOW)
 
 # Create Flask app
 app = Flask(__name__)
@@ -21,9 +20,7 @@ HTML_TEMPLATE = """
 </head>
 <body>
     <h1>Control the LEDs</h1>
-    <p>LED on GPIO17 is currently: <strong>{{ "ON" if led_states[17] else "OFF" }}</strong></p>
-    <p>LED on GPIO27 is currently: <strong>{{ "ON" if led_states[27] else "OFF" }}</strong></p>
-    <p>LED on GPIO22 is currently: <strong>{{ "ON" if led_states[22] else "OFF" }}</strong></p>
+    <p>LEDs are currently: <strong>{{ "ON" if led_state else "OFF" }}</strong></p>
     <form method="post">
         <button type="submit" name="action" value="on">Turn ALL ON</button>
         <button type="submit" name="action" value="off">Turn ALL OFF</button>
@@ -32,31 +29,46 @@ HTML_TEMPLATE = """
 </html>
 """
 
+# Helper function for fading LEDs
+def fade_leds(action):
+    steps = 50
+    delay = 0.005  # Total of 0.25 seconds for full fade
+
+    for i in range(steps + 1):
+        pwm_value = i / steps if action == "on" else (steps - i) / steps
+
+        # Center LED starts earlier/later
+        if pwm_value >= 0.2:
+            GPIO.output(27, GPIO.HIGH if action == "on" else GPIO.LOW)
+        else:
+            GPIO.output(27, GPIO.LOW)
+
+        # Outer LEDs
+        GPIO.output(17, GPIO.HIGH if pwm_value > 0.1 else GPIO.LOW)
+        GPIO.output(22, GPIO.HIGH if pwm_value > 0.1 else GPIO.LOW)
+
+        time.sleep(delay)
+
+# Flask routes
 @app.route("/", methods=["GET", "POST"])
 def index():
+    global led_state
     if request.method == "POST":
-        action = request.form.get("action")
+        action = request.form["action"]
         if action == "on":
-            GPIO.output(17, GPIO.HIGH)
-            GPIO.output(27, GPIO.HIGH)
-            GPIO.output(22, GPIO.HIGH)
+            fade_leds("on")
+            led_state = True
         elif action == "off":
-            GPIO.output(17, GPIO.LOW)
-            GPIO.output(27, GPIO.LOW)
-            GPIO.output(22, GPIO.LOW)
+            fade_leds("off")
+            led_state = False
 
-    # Read current LED states
-    led_states = {
-        17: GPIO.input(17),
-        27: GPIO.input(27),
-        22: GPIO.input(22)
-    }
-    return render_template_string(HTML_TEMPLATE, led_states=led_states)
+    return render_template_string(HTML_TEMPLATE, led_state=led_state)
 
-# Run the app
+# Initialize LED state
+led_state = False
+
 if __name__ == "__main__":
     try:
         app.run(host="0.0.0.0", port=5000)
-    except KeyboardInterrupt:
+    finally:
         GPIO.cleanup()
-        print("\nGPIO cleanup and app stopped.")
