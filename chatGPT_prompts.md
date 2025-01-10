@@ -861,7 +861,7 @@ Let me know if there's anything else you'd like to tweak!
 #### My Thoughts ####
 I like how this looks - just those little enhancements make it looks a little better. The page feels like it has a little more depth with two colors. I like using fonts other than Times Roman, so it feels more deliberate. And centering everything makes it so it doesn't feel as awkward if the browser is full-screen width. I think this is great:
 
-![Screenshot](./doc/screenshots/v3_screenshot.png)
+![Screenshot](./doc/screenshots/v4_screenshot.png)
 
 
 #### You Said: ####
