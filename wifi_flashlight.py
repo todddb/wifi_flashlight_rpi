@@ -16,8 +16,34 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LED Control</title>
+    <title>Web-Controlled Flashlight</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        #slider-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        #slider-description {
+            font-size: 12px;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             // Update slider and state dynamically
@@ -42,9 +68,12 @@ HTML_TEMPLATE = """
     </script>
 </head>
 <body>
-    <h1>Control the LEDs</h1>
+    <h1>Web-Controlled Flashlight</h1>
     <p>LEDs are currently: <strong id="led-status">{{ "ON" if led_state else "OFF" }}</strong></p>
-    <input type="range" id="led-slider" min="0" max="1" step="1" value="{{ 1 if led_state else 0 }}">
+    <div id="slider-container">
+        <input type="range" id="led-slider" min="0" max="1" step="1" value="{{ 1 if led_state else 0 }}">
+        <div id="slider-description">Click and drag the slider to turn the flashlight on or off.</div>
+    </div>
 </body>
 </html>
 """

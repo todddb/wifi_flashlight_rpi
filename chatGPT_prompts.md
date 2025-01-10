@@ -722,3 +722,151 @@ This really looks pretty good. I like the slider, and I like that it stays sync'
 There are just a few small adjustments I'd like to make to the webpage. I'll do those now.
 
 #### You Said: ####
+This is almost perfect. Could you adjust the html and rename it from "LED light control" to "Web-Controlled Flashlight"? Also, can you center all of the content in the HTML, rather than left justified. For aestetics, would you change the font to a sans serif font? Also, can you add a light grey box around the slider, and put a small font description of how to use it (ie, click and drag the slider to turn it on or off)? Thanks for your help!
+
+#### ChatGPT said:####
+    from flask import Flask, jsonify, render_template_string, request
+    import RPi.GPIO as GPIO
+    import time
+
+    # Setup GPIO
+    GPIO.setmode(GPIO.BCM)
+    LED_PINS = [17, 27, 22]
+    for pin in LED_PINS:
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
+
+    # Create Flask app
+    app = Flask(__name__)
+
+    HTML_TEMPLATE = """
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Web-Controlled Flashlight</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #f9f9f9;
+            }
+            #slider-container {
+                border: 1px solid #ccc;
+                padding: 20px;
+                background: #fff;
+                border-radius: 8px;
+                display: inline-block;
+            }
+            #slider-description {
+                font-size: 12px;
+                color: #555;
+                margin-top: 10px;
+            }
+        </style>
+        <script>
+            $(document).ready(function() {
+                // Update slider and state dynamically
+                function updateState() {
+                    $.getJSON("/state", function(data) {
+                        $("#led-slider").val(data.state ? 1 : 0);
+                        $("#led-status").text(data.state ? "ON" : "OFF");
+                    });
+                }
+
+                // Change LED state when slider moves
+                $("#led-slider").on("input", function() {
+                    var state = $(this).val() == 1 ? "on" : "off";
+                    $.get("/led=" + state, function() {
+                        updateState();
+                    });
+                });
+
+                // Periodically check state
+                setInterval(updateState, 1000);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Web-Controlled Flashlight</h1>
+        <p>LEDs are currently: <strong id="led-status">{{ "ON" if led_state else "OFF" }}</strong></p>
+        <div id="slider-container">
+            <input type="range" id="led-slider" min="0" max="1" step="1" value="{{ 1 if led_state else 0 }}">
+            <div id="slider-description">Click and drag the slider to turn the flashlight on or off.</div>
+        </div>
+    </body>
+    </html>
+    """
+
+    # Helper function for fading LEDs
+    def fade_leds(action):
+        steps = 50
+        delay = 0.01  # Total of 0.5 seconds for full fade
+
+        for i in range(steps + 1):
+            pwm_value = i / steps if action == "on" else (steps - i) / steps
+
+            for pin in LED_PINS:
+                GPIO.output(pin, GPIO.HIGH if pwm_value > 0 else GPIO.LOW)
+
+            time.sleep(delay)
+
+    # Flask routes
+    @app.route("/")
+    def index():
+        return render_template_string(HTML_TEMPLATE, led_state=led_state)
+
+    @app.route("/led=<state>", methods=["GET"])
+    def control_led(state):
+        global led_state
+        if state == "on":
+            fade_leds("on")
+            led_state = True
+        elif state == "off":
+            fade_leds("off")
+            led_state = False
+
+        return "", 204
+
+    @app.route("/state", methods=["GET"])
+    def get_state():
+        return jsonify(state=led_state)
+
+    # Initialize LED state
+    led_state = False
+
+    if __name__ == "__main__":
+        try:
+            app.run(host="0.0.0.0", port=5000)
+        finally:
+            GPIO.cleanup()
+
+
+I've updated the interface as requested:
+
+1. The title has been renamed to "Web-Controlled Flashlight."
+2. All content is centered on the page.
+3. The font is now a sans-serif font (Arial).
+4. A light grey box surrounds the slider, along with a small description to guide the user.
+
+Let me know if there's anything else you'd like to tweak!
+
+#### My Thoughts ####
+I like how this looks - just those little enhancements make it looks a little better. The page feels like it has a little more depth with two colors. I like using fonts other than Times Roman, so it feels more deliberate. And centering everything makes it so it doesn't feel as awkward if the browser is full-screen width. I think this is great:
+
+![Screenshot](./doc/screenshots/v3_screenshot.png)
+
+
+#### You Said: ####
+That looks great! Thank you for your help!
+
+#### ChatGPT said: ####
+
+You're welcome! I'm glad it turned out well. If you have any further questions or need additional help in the future, feel free to reach out. Have fun with your Web-Controlled Flashlight project! 🚀
