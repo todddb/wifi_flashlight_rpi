@@ -118,7 +118,7 @@ Here is the commandline output:
 
 and here is what the webpage looks like:
 
-![Screenshot](./doc/screenshots/v1_screenshot.png)
+![Screenshot](./images/v1_screenshot.png)
 
 So, I went back to ChatGPT to add the other two LEDs.
 
@@ -198,7 +198,7 @@ I've added support for two additional LEDs connected to GPIO27 and GPIO22. The w
 
 When I ran it, the new interface looks like this:
 
-![Screenshot](./doc/screenshots/v2_screenshot.png)
+![Screenshot](./images/v2_screenshot.png)
 
 I don't like how it shows all 3 LEDs seperately, I would like them to function as a single light, even if I have them turn on and off a little staggered to provide a nice fade.
 
@@ -717,7 +717,7 @@ I've updated the application to include a slider control for the LEDs and implem
 #### My Thoughts: ####
 This really looks pretty good. I like the slider, and I like that it stays sync'd, even if multiple browsers are hitting it at the same time. Here is the current view:
 
-![Screenshot](./doc/screenshots/v3_screenshot.png)
+![Screenshot](./images/v3_screenshot.png)
 
 There are just a few small adjustments I'd like to make to the webpage. I'll do those now.
 
@@ -861,7 +861,7 @@ Let me know if there's anything else you'd like to tweak!
 #### My Thoughts ####
 I like how this looks - just those little enhancements make it looks a little better. The page feels like it has a little more depth with two colors. I like using fonts other than Times Roman, so it feels more deliberate. And centering everything makes it so it doesn't feel as awkward if the browser is full-screen width. I think this is great:
 
-![Screenshot](./doc/screenshots/v4_screenshot.png)
+![Screenshot](./images/v4_screenshot.png)
 
 
 #### You Said: ####
