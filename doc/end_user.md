@@ -18,7 +18,7 @@ This should be done in the Operating System of the client device. Please note th
 
 Once connected to the same wi-fi, you will need to open a browser and connect to the webpage of the light. To do this, you'll need the IP address of the device from the system administrator. This can vary, based on the DHCP server of the laptop. At the time this document was written, it was `192.168.137.131`.
 
-If that address is still valid, the user would open a browser and put in the address `http://192.168.137.131:5000`. This is a little different than many websites, because it uses an IP address instead of a name, and it has a port number at the end. Without that, you won't be able to connect properly.
+If that address is still valid, the user would open a browser and put in the address `http://192.168.137.131`. This is a little different than many websites, because it uses an IP address instead of a name.
 
 If you have tried that and get a message that you can't connect, please contact the system administrator and verify the IP address and that the system is running.
 
