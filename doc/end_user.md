@@ -38,11 +38,11 @@ In this position, the interface should show that the **LEDs are Currently: On**.
 
 The system supports GET commands if you wish to control it programatically. In order to do so, the device that will be making the API calls must be connected to the same wifi as this device. At that point, it is controlled by simply issuing the command:
 
-`http://<ip address>:5000/led=on` to turn on.
+`http://<ip address>/led=on` to turn on.
 
 --OR--
 
-`http://<ip address>:5000/led=off` to turn off.
+`http://<ip address>/led=off` to turn off.
 
 *Example:*
-`http://192.168.137.131:5000/led=on` or `http://192.168.137.131:5000/led=off`
+`http://192.168.137.131/led=on` or `http://192.168.137.131/led=off`
