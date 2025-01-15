@@ -34,7 +34,7 @@ If you receive a timeout or "no route to host" response, then it means that the 
 
 #### Ping Success, Browser Success ####
 
-If the system responds to pings, then you should try connecting to it with a web browser. To do this, open a browser and point it to `http://ip_address:5000`. (Example: `http://192.168.137.131:5000`). If it connects properly, you should see something similar to:
+If the system responds to pings, then you should try connecting to it with a web browser. To do this, open a browser and point it to `http://ip_address`. (Example: `http://192.168.137.131`). If it connects properly, you should see something similar to:
 ![User Interface: Off](./images/browser_control_off.png)
 
 This means that the system is working properly, and the service is running properly.
