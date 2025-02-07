@@ -38,6 +38,9 @@ These are some of my thoughts - they aren't explicitly described, but I'm planni
  - I *could* build all 3 LEDs in a parallel circuit, but it would overdrive a single GPIO pin (drawing 60 mA). I think it makes more sense to put each LED on a seperate GPIO pin, and programatically treat them all as one. This means I could do some cool transitions by turning them on staggered or sequentially or something to give a cool effect.
  - I will need 3 GPIO pins, and one ground pin on the Raspberry Pi. For simplicity's sake, I would love to have them all in a row. If I use the GND Pin (9) and then GPIO17, GPIO27, and GPIO22, they should all line up nice and cleanly. I will also use three different colored jumpers, so I can make sure that we maintain consistency throughout the circuit.
  - For my circuits, I know that I will need a resistor for each LED. In consulting https://ledcalculator.net/#p=3.3&v=1.8&c=20&n=1&o=w , it says that I need a 75-Ohm resistor for the circuit. Each of the individual LED circuits can share a ground back to my Raspberry Pi.
+ - Given these considerations, this is my plan for how the hardward should be built:
+   ![Board Design](./images/wifi-flashlight-as-built.png)
+   ![Board Schematic](./images/wifi-flashlight-schem.png)
 - I will probably need AJAX to sync the backend with the web page. This could get more chatty for the front end to keep up constant communication, but it is worth the cost.
 
 #### State Diagram ####
