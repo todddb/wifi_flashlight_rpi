@@ -54,3 +54,7 @@ My flowchart of how the code should execute seems very similar to the state diag
 
 #### Design Document ####
 For my project, this file *(design.md)* serves as my design document.
+
+#### Generative AI Coding ####
+Part of this project was using genAI to do the coding for me. I kept the log of the prompts I used and the outputs. You can see all of that here:
+![Generative AI Conversation](chatGPT_prompts.md)
